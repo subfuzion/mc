@@ -1,12 +1,12 @@
 import {constants, accessSync} from 'node:fs';
 import {inspect} from 'node:util';
 
-import {PlanBuilderFactory, PlanBuilderType} from './builder.ts';
+import {PlanBuilderFactory, PlanBuilderType} from '#lib/plan/builder.ts';
+import pkg from '#lib/util/package.ts';
 import {Config} from './config.ts';
 import {Context} from './context.ts';
 import {IO} from './io.ts';
 import {LogLevels} from './log.ts';
-import pkg from './package.ts';
 
 export class Cli {
   context: Context;

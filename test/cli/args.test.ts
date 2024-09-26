@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test, {before, beforeEach, suite} from 'node:test';
 
-import {MockLogger} from '#test/mock/mocklogger.ts';
-import {Args} from './args.ts';
+import {Args} from '#lib/cli/args.ts';
+import {MockLogger} from './logger.mock.ts';
 
 await suite('args', async () => {
   let mockLogger: MockLogger;

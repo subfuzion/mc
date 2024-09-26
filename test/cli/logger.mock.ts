@@ -1,5 +1,5 @@
 import {format} from 'node:util';
-import {type LogLevel, LogLevels, type Logger} from '#lib/log.ts';
+import {type LogLevel, LogLevels, type Logger} from '#lib/cli/log.ts';
 
 export class MockLogger implements Logger {
   logLevel: LogLevel;

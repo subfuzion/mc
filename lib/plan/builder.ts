@@ -1,6 +1,6 @@
-import type {Context} from '#lib/context.ts';
+import type {Context} from '#lib/cli/context.ts';
 import type {Plan} from './plan.ts';
-import {SampleSuiteBuilder} from './plan/samplesuite/builder.ts';
+import {SampleSuiteBuilder} from './samplesuite/builder.ts';
 
 // TypeScript enum is not supported in strip-only mode. Symbols aren't strictly
 // necessary here, but do make it easier for the caller not to mistake.

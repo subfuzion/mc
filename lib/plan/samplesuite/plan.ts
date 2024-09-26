@@ -1,5 +1,5 @@
-import type {Context} from '#lib/context.ts';
-import {type Plan, type PlanCallback, PlanRunResults} from '#lib/plan.ts';
+import type {Context} from '#lib/cli/context.ts';
+import {type Plan, type PlanCallback, PlanRunResults} from '#lib/plan/plan.ts';
 
 export class SampleSuitePlan implements Plan {
   context: Context;

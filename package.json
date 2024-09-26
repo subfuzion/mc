@@ -15,7 +15,8 @@
     "#test/*": "./test/*"
   },
   "scripts": {
-    "test": "node --test ./lib/**/*.test.ts",
+    "test": "node --test ./test/**/*.test.ts",
+    "test:watch": "node --watch --test ./test/**/*.test.ts",
     "check": "biome check && tsc",
     "fix": "biome check --write && tsc"
   },

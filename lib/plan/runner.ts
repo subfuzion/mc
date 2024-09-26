@@ -2,7 +2,7 @@ import {
   DefaultCommand,
   type ExecCommandCallback,
   type ExecCommandOptions,
-} from './exec.ts';
+} from '#lib/process/exec.ts';
 
 type VisitorCallback = (node: SampleNode) => void;
 
