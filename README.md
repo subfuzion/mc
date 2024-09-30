@@ -1,5 +1,9 @@
 # mc
 
+`mc` runs a program or a suite of programs and reports exit codes. It's
+primarily intended for automation in a CI environment, but it also provides a
+CLI for interactive test runs.
+
 ```
 mc 1.0.0 - run a suite of programs and report their exit codes
 
