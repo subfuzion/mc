@@ -4,6 +4,18 @@
 primarily intended for automation in a CI environment, but it also provides a
 CLI for interactive test runs.
 
+A run specification includes steps that should be familiar to anyone who has
+written a build config file for Cloud Build or workflows for GitHub Actions.
+
+The final output is a container image that includes lifecycle steps that support
+setup and teardown steps before launching target containerized programs.
+
+By default, run specification steps are launched in sequence to ensure
+predictable behavior (for examples, programs that make modifications to storage
+or databases shouldn't conflict with other programs launched as part of a
+suite). Support is intended for launching non-overlapping programs and suites
+later.
+
 ```
 mc 1.0.0 - run a suite of programs and report their exit codes
 
