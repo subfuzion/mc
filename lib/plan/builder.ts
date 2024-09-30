@@ -1,11 +1,11 @@
-import type {Context} from '#lib/cli/context.ts';
-import type {Plan} from './plan.ts';
-import {SampleSuiteBuilder} from './samplesuite/builder.ts';
+import type { Context } from "@/cli/context.ts";
+import type { Plan } from "./plan.ts";
+import { SampleSuiteBuilder } from "@/plan/samplesuite/builder.ts";
 
 // TypeScript enum is not supported in strip-only mode. Symbols aren't strictly
 // necessary here, but do make it easier for the caller not to mistake.
 export class PlanBuilderType {
-  static SampleSuiteBuilder = Symbol('SampleSuiteBuilder');
+  static SampleSuiteBuilder = Symbol("SampleSuiteBuilder");
 }
 
 export interface PlanBuilder {

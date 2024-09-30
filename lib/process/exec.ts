@@ -1,6 +1,14 @@
-import {type ChildProcess, spawn, spawnSync} from 'node:child_process';
+import { type ChildProcess, spawn, spawnSync } from "node:child_process";
+import { Buffer } from "node:buffer";
 
-export const DefaultCommand = 'node';
+export const DefaultCommand = "deno";
+
+export class ExecCommandSpec {
+  cmd!: string;
+  args?: string[];
+  options?: ExecCommandOptions;
+  cb?: ExecCommandCallback;
+}
 
 export interface ExecCommandOptions {
   cwd?: string | URL;
@@ -23,8 +31,8 @@ export interface ExecCommandResult {
   command: string;
   stdout: string;
   stderr: string;
-  exitCode: number;
-  error: Error;
+  exitCode: number | null;
+  error?: unknown;
 }
 
 export type ExecCommandCallback = (result: ExecCommandResult) => void;
@@ -35,33 +43,27 @@ export type ExecCommandCallback = (result: ExecCommandResult) => void;
  * null if exec failure) and asynchronously call a callback with an
  * ExecCommandResult.
  */
+export function execCommandSpec(
+  spec: ExecCommandSpec,
+): ExecCommandResult | ChildProcess | undefined {
+  return exec(
+    spec.cmd,
+    spec.args,
+    spec.options,
+    spec.cb,
+  );
+}
+
+// TODO: port to Deno (https://docs.deno.com/runtime/tutorials/subprocess/)
 export function exec(
-  cmd: string | string[],
-  args?: string[] | ExecCommandOptions | ExecCommandCallback,
-  options?: ExecCommandOptions | ExecCommandCallback,
+  cmd: string,
+  args?: string[],
+  options?: ExecCommandOptions,
   cb?: ExecCommandCallback,
 ): ExecCommandResult | ChildProcess | undefined {
-  // cmd, options, and cb are optional. Shift args to match parameters.
-  // It can take up to 3 shifts to get all 4 args matched to parameters.
-  if (Array.isArray(cmd)) {
-    cb = options as ExecCommandCallback;
-    options = args as ExecCommandOptions;
-    args = cmd as string[];
-    cmd = DefaultCommand;
-  }
-  if (!Array.isArray(args)) {
-    cb = options as ExecCommandCallback;
-    options = args as ExecCommandOptions;
-    args = undefined;
-  }
-  if (typeof options === 'function') {
-    cb = options as ExecCommandCallback;
-    options = undefined;
-  }
-
   let command = cmd;
-  if (Array.isArray(args) && args.length > 0) {
-    command += ` ${args.join(' ').trim()}`;
+  if (Array.isArray(args) && args?.length > 0) {
+    command += ` ${args.join(" ").trim()}`;
   }
 
   let resultObject: ExecCommandResult;
@@ -69,14 +71,14 @@ export function exec(
   // Check if cmd exists before attempting to spawn it. This is because node
   // will hang until the timeout expires on an ENOENT. Setting `detached: true`
   // as an option doesn't help.
-  const result = spawnSync('which', [cmd]);
+  const result = spawnSync("which", [cmd]);
   if (result.status !== 0) {
     resultObject = {
       error: new Error(`${cmd}: command not found`),
       command: command,
       exitCode: -1,
-      stdout: '',
-      stderr: '',
+      stdout: "",
+      stderr: "",
     };
     if (cb) {
       cb(resultObject);
@@ -86,18 +88,18 @@ export function exec(
   }
 
   if (cb) {
-    let stdout = '';
-    let stderr = '';
-    // @ts-ignore
+    let stdout = "";
+    let stderr = "";
+    // @ts-ignore todo
     const child = spawn(cmd, args, options) as ChildProcessWithoutNullStreams;
     try {
-      child.once('error', (err: Error) => {
+      child.once("error", (err: Error) => {
         resultObject = {
           error: err,
           command: command,
           exitCode: -1,
-          stdout: '',
-          stderr: '',
+          stdout: "",
+          stderr: "",
         };
         child.removeAllListeners();
         child.stdin.end();
@@ -106,7 +108,7 @@ export function exec(
         child.kill();
         cb(resultObject);
       });
-      child.once('close', (code: number) => {
+      child.once("close", (code: number) => {
         resultObject = {
           error: undefined,
           command: command,
@@ -116,10 +118,10 @@ export function exec(
         };
         cb(resultObject);
       });
-      child.stdout.on('data', (data: Buffer) => {
+      child.stdout.on("data", (data: Buffer) => {
         stdout += data.toString();
       });
-      child.stderr.on('data', (data: Buffer) => {
+      child.stderr.on("data", (data: Buffer) => {
         stderr += data.toString();
       });
     } catch (err) {
@@ -128,8 +130,8 @@ export function exec(
         error: err,
         command: command,
         exitCode: -1,
-        stdout: '',
-        stderr: '',
+        stdout: "",
+        stderr: "",
       };
       cb(resultObject);
     }
@@ -137,7 +139,7 @@ export function exec(
   }
   /* no callback */
   try {
-    // @ts-ignore
+    // @ts-ignore todo
     const result = spawnSync(cmd, args, options);
     resultObject = {
       error: undefined,
@@ -151,8 +153,8 @@ export function exec(
       error: err,
       command: command,
       exitCode: -1,
-      stdout: '',
-      stderr: '',
+      stdout: "",
+      stderr: "",
     };
   }
   return resultObject;

@@ -1,10 +1,12 @@
-import type {Context} from '#lib/cli/context.ts';
-import type {PlanBuilder} from '#lib/plan/builder.ts';
-import type {Plan} from '#lib/plan/plan.ts';
-import {SampleSuitePlan} from './plan.ts';
+import type { Context } from "@/cli/context.ts";
+import type { PlanBuilder } from "@/plan/builder.ts";
+import type { Plan } from "@/plan/plan.ts";
+import { SampleSuitePlan } from "@/plan/samplesuite/plan.ts";
 
 export class SampleSuiteBuilder implements PlanBuilder {
   async build(context: Context): Promise<Plan> {
-    return new SampleSuitePlan(context);
+    return await new Promise((resolve) => {
+      resolve(new SampleSuitePlan(context));
+    });
   }
 }

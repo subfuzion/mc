@@ -1,23 +1,23 @@
 export type PlanCallback = () => void;
 
 export type PlanStatus =
-  | 'pending'
-  | 'skipped'
-  | 'started'
-  | 'succeeded'
-  | 'failed';
+  | "pending"
+  | "skipped"
+  | "started"
+  | "succeeded"
+  | "failed";
 
 export class PlanRunResults {
-  prepareStatus: PlanStatus = 'pending';
+  prepareStatus: PlanStatus = "pending";
   prepareErrors: Error[] = [];
 
-  setupStatus: PlanStatus = 'pending';
+  setupStatus: PlanStatus = "pending";
   setupErrors: Error[] = [];
 
-  executeStatus: PlanStatus = 'pending';
+  executeStatus: PlanStatus = "pending";
   executeErrors: Error[] = [];
 
-  cleanupStatus: PlanStatus = 'pending';
+  cleanupStatus: PlanStatus = "pending";
   cleanupErrors: Error[] = [];
 }
 

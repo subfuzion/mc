@@ -1,10 +1,10 @@
-import {readFile} from 'node:fs/promises';
+import { readFile } from "node:fs/promises";
 
-import type {SampleSuitePlan} from './plan.ts';
+import type { SampleSuitePlan } from "./plan.ts";
 
 export class SampleSuiteReader {
   async read(pathname: string): Promise<string> {
-    return await readFile(pathname, {encoding: 'utf8'});
+    return await readFile(pathname, { encoding: "utf8" });
   }
 
   parse(text: string): Promise<SampleSuitePlan> {

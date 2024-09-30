@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
     "allowImportingTsExtensions": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "module": "nodenext",
     "noEmit": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@/*": ["./lib/*"]
+    }
   }
 }

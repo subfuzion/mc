@@ -2,7 +2,7 @@ import {
   DefaultCommand,
   type ExecCommandCallback,
   type ExecCommandOptions,
-} from '#lib/process/exec.ts';
+} from "@/process/exec.ts";
 
 type VisitorCallback = (node: SampleNode) => void;
 
@@ -11,17 +11,17 @@ interface VisitorCallbackOptions {
 }
 
 interface ExecCommandSpec {
-  cmd: string;
+  cmd?: string;
   args: string[];
   options: ExecCommandOptions;
-  cb: ExecCommandCallback;
+  cb?: ExecCommandCallback;
 }
 
 class SampleNode {
   name: string;
   cmdSpec: ExecCommandSpec;
-  children: SampleNode[];
-  skip: boolean;
+  children?: SampleNode[];
+  skip = false;
 
   constructor(
     name: string,
@@ -30,16 +30,21 @@ class SampleNode {
     options?: ExecCommandOptions | ExecCommandCallback,
     cb?: ExecCommandCallback,
   ) {
+    const spec = {} as ExecCommandSpec;
     // The cmd is optional, If the first argument looks like the args array,
     // reassign args to parameters on the right and then assign the default cmd.
     if (Array.isArray(cmd)) {
-      cb = options as ExecCommandCallback;
-      options = args as ExecCommandOptions;
-      args = cmd as string[];
-      cmd = DefaultCommand;
+      spec.cb = options as ExecCommandCallback;
+      spec.options = args as ExecCommandOptions;
+      spec.args = cmd as string[];
+      spec.cmd = DefaultCommand;
+    } else {
+      spec.cb = cb;
+      spec.options = options as ExecCommandOptions;
+      spec.args = args as string[];
+      spec.cmd = cmd;
     }
-    // @ts-ignore
-    this.cmdSpec = {cmd, args, options, cb};
+    this.cmdSpec = spec;
     this.name = name;
   }
 
@@ -91,9 +96,9 @@ class SampleRunner {
   }
 }
 
-const suite = new SampleNode('Sample Suite')
-  .add(new SampleNode('subsuite1'))
-  .add(new SampleNode('subsuite2'));
+const suite = new SampleNode("Sample Suite")
+  .add(new SampleNode("subsuite1"))
+  .add(new SampleNode("subsuite2"));
 
 const runner = new SampleRunner(suite);
 runner.run();

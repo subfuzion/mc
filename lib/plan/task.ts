@@ -1,8 +1,8 @@
-import type {ExecCommandOptions, ExecCommandResult} from '#lib/process/exec.ts';
+import type { ExecCommandOptions, ExecCommandResult } from "@/process/exec.ts";
 
 export class TaskCommand {
-  options: ExecCommandOptions;
-  result: ExecCommandResult;
+  options?: ExecCommandOptions;
+  result?: ExecCommandResult;
 }
 
 /**

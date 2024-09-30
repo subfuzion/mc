@@ -1,28 +1,6 @@
 {
-  "name": "mc",
-  "description": "run a suite of programs and report their exit codes",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=22.6.0"
-  },
-  "bin": {
-    "mc": "bin/main.ts"
-  },
-  "imports": {
-    "#lib/*": "./lib/*",
-    "#test/*": "./test/*"
-  },
-  "scripts": {
-    "test": "node --test ./test/**/*.test.ts",
-    "test:watch": "node --watch --test ./test/**/*.test.ts",
-    "check": "biome check && tsc",
-    "fix": "biome check --write && tsc"
-  },
+  "description": "This package.json is only for IDE support",
   "devDependencies": {
-    "@biomejs/biome": "1.9.2",
-    "@types/node": "22.5.5",
-    "typescript": "5.6.2"
+    "@types/node": "22.7.4"
   }
 }

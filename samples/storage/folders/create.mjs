@@ -1,1 +1,1 @@
-throw new Error('should fail');
+throw new Error("should fail");

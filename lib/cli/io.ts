@@ -1,6 +1,7 @@
-import {format} from 'node:util';
+import { format } from "node:util";
 
-import {type LogLevel, LogLevels, type Logger} from './log.ts';
+import { type Logger, type LogLevel, LogLevels } from "./log.ts";
+import process from "node:process";
 
 // export type StdinType = NodeJS.ReadStream & {fd: 0};
 export type StdinType = NodeJS.ReadStream;
@@ -15,13 +16,13 @@ const DefaultStdout: StdoutType = process.stdout;
 const DefaultStderr: StderrType = process.stderr;
 
 class Prefix {
-  static readonly info: [string, string] = ['     |', '[ info ]'];
-  static readonly warn: [string, string] = [' wrn |', '[ warn ]'];
-  static readonly error: [string, string] = [' err |', '[ ERR! ]'];
-  static readonly ok: [string, string] = [' ok  |', '[ ok   ]'];
-  static readonly pass: [string, string] = [' 🟢  |', '[ pass ]'];
-  static readonly fail: [string, string] = [' 🔴  |', '[ FAIL ]'];
-  static readonly abort: [string, string] = [' 🚫  ', '[ ABRT ]'];
+  static readonly info: [string, string] = ["     |", "[ info ]"];
+  static readonly warn: [string, string] = [" wrn |", "[ warn ]"];
+  static readonly error: [string, string] = [" err |", "[ ERR! ]"];
+  static readonly ok: [string, string] = [" ok  |", "[ ok   ]"];
+  static readonly pass: [string, string] = [" 🟢  |", "[ pass ]"];
+  static readonly fail: [string, string] = [" 🔴  |", "[ FAIL ]"];
+  static readonly abort: [string, string] = [" 🚫  |", "[ ABRT ]"];
 
   static get(prefix: [string, string]): string {
     return process.stdout.isTTY ? prefix[0] : prefix[1];
@@ -36,7 +37,7 @@ export class IO implements Logger {
   readonly #stderr: StderrType;
 
   constructor(
-    logLevel: LogLevel = 'info',
+    logLevel: LogLevel = "info",
     console: Console = DefaultConsole,
     stdin: StdinType = DefaultStdin,
     stdout: StdoutType = DefaultStdout,
@@ -89,53 +90,50 @@ export class IO implements Logger {
   /**
    * Prints format str to stdout (regardless of log level).
    */
-  printf(fmt: string, ...params: any[]): void {
+  printf(fmt: string, ...params: unknown[]): void {
     this.print(format(fmt, ...params));
   }
 
   /**
    * Prints message to stdout with a newline (regardless of log level).
    */
-  println(...params: any[]): void {
-    const str = params.length > 0 ? params.map((p) => String(p)).join(' ') : '';
+  println(...params: unknown[]): void {
+    const str = params.length > 0 ? params.map((p) => String(p)).join(" ") : "";
     this.print(`${str}\n`);
   }
 
-  debug(message: any, ...params: any[]): void {
-    this.shouldLog('debug') && this.console.debug(message, ...params);
+  debug(message: unknown, ...params: unknown[]): void {
+    this.shouldLog("debug") && this.console.debug(message, ...params);
   }
 
-  log(message: any, ...params: any[]): void {
-    this.shouldLog('log') && this.console.log(message, ...params);
+  log(message: unknown, ...params: unknown[]): void {
+    this.shouldLog("log") && this.console.log(message, ...params);
   }
 
-  info(message: any, ...params: any[]): void {
-    this.shouldLog('info') &&
+  info(message: unknown, ...params: unknown[]): void {
+    this.shouldLog("info") &&
       this.console.info(`${Prefix.get(Prefix.info)} ${message}`, ...params);
   }
 
-  warn(message: any, ...params: any[]): void {
-    this.shouldLog('warn') &&
+  warn(message: unknown, ...params: unknown[]): void {
+    this.shouldLog("warn") &&
       this.console.warn(`${Prefix.get(Prefix.warn)} ${message}`, ...params);
   }
 
-  error(message: any, ...params: any[]): void {
-    this.shouldLog('error') &&
+  error(message: unknown, ...params: unknown[]): void {
+    this.shouldLog("error") &&
       this.console.error(`${Prefix.get(Prefix.error)} ${message}`, ...params);
   }
 
-  ok(...params: any[]): void {
-    const sep = params.length ? ':' : '';
+  ok(...params: unknown[]): void {
     this.println(Prefix.get(Prefix.ok), ...params);
   }
 
-  pass(...params: any[]): void {
-    const sep = params.length ? ':' : '';
+  pass(...params: unknown[]): void {
     this.println(Prefix.get(Prefix.pass), ...params);
   }
 
-  fail(...params: any[]): void {
-    const sep = params.length ? ':' : '';
+  fail(...params: unknown[]): void {
     this.println(Prefix.get(Prefix.fail), ...params);
   }
 
@@ -146,22 +144,18 @@ export class IO implements Logger {
   /**
    * Will print regardless of loglevel.
    */
-  static printf(fmt: string, ...params: any[] | undefined): void {
+  static printf(fmt: string, ...params: unknown[]): void {
     new IO().printf(fmt, ...params);
   }
 
   /**
    * Will print regardless of loglevel.
    */
-  static abort(reason: string | Error) {
+  static abort(reason: unknown) {
     // Standardize format and shorten error output.
-    let m = reason instanceof Error ? reason.message : reason;
-    m = m.split('\n')[0].split('.')[0];
+    let m = reason instanceof Error ? reason.message : String(reason);
+    m = m.split("\n")[0].split(".")[0];
     m = m[0].toLowerCase() + m.slice(1);
-    if (process.stdout.isTTY) {
-      new IO().console.error(`🚫 ABORT: ${m}`);
-    } else {
-      new IO().console.error(`ABORT: ${m}`);
-    }
+    console.error(Prefix.get(Prefix.abort), m);
   }
 }

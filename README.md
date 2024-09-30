@@ -4,12 +4,12 @@
 mc 1.0.0 - run a suite of programs and report their exit codes
 
 USAGE:
-  mc [OPTIONS] PATHNAME
+  mc [OPTIONS] [PATHNAME]
 
-  PATHNAME           Path to a program or directory of programs to run
+  PATHNAME           path to a program or directory ('.')
 
 OPTIONS:
-  -h, --help         Print usage information
-  -l, --loglevel     Print: debug | log | info * | warn | error | silent
-  -v, --version      Print current version
+  -h, --help         print usage information
+  -l, --loglevel     increase output: silent | error | warn | info * | log | debug
+  -v, --version      print current version
 ```

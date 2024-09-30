@@ -1,61 +1,54 @@
-import assert from 'node:assert/strict';
-import test, {before, beforeEach, suite} from 'node:test';
+import {
+  assert,
+  assertStrictEquals as assertEquals,
+  assertThrows,
+} from "@std/assert";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 
-import {Args} from '#lib/cli/args.ts';
-import {MockLogger} from './logger.mock.ts';
+import { Args } from "@/cli/args.ts";
+import { MockLogger } from "./logger.mock.ts";
 
-await suite('args', async () => {
+describe("args", () => {
   let mockLogger: MockLogger;
-  let args: Args;
-
-  before(() => {
-    mockLogger = new MockLogger();
-    args = new Args();
-  });
 
   beforeEach(() => {
-    mockLogger.clear();
+    mockLogger = new MockLogger();
   });
 
-  await test.skip('must have at least one argument', () => {
-    const argv = [];
-    assert.throws(() => args.parse(argv));
+  it("must not have more than one argument", () => {
+    const argv = [".", "foo"];
+    assertThrows(() => new Args(argv));
   });
 
-  await test.skip('must not have more than one argument', () => {
-    const argv = ['.', 'foo'];
-    assert.throws(() => args.parse(argv));
+  it("should set loglevel = log", () => {
+    const argv = ["--loglevel=log", "."];
+    const args = new Args(argv);
+    assertEquals(args.options.logLevel, "log");
   });
 
-  await test('should set loglevel = log', () => {
-    const argv = ['--loglevel=log', '.'];
-    args.parse(argv);
-    assert.equal(args.logLevel, 'log');
+  it("should log", () => {
+    const argv = ["--loglevel=log", "."];
+    const args = new Args(argv);
+    assertEquals(args.options.logLevel, "log");
+
+    mockLogger.logLevel = args.options.logLevel;
+    mockLogger.log("hello");
+    assert(mockLogger.stdout.includes("hello"));
   });
 
-  await test('should log', () => {
-    const argv = ['--loglevel=log', '.'];
-    args.parse(argv);
-    assert.equal(args.logLevel, 'log');
+  it("should not log", () => {
+    const argv = ["--loglevel=log", "."];
+    const args = new Args(argv);
+    assertEquals(args.options.logLevel, "log");
 
-    mockLogger.logLevel = args.logLevel;
-    mockLogger.log('hello');
-    assert.ok(mockLogger.stdout.includes('hello'));
+    mockLogger.logLevel = args.options.logLevel;
+    mockLogger.debug("hello");
+    assert(!mockLogger.stdout.includes("hello"));
   });
 
-  await test('should not log', () => {
-    const argv = ['--loglevel=log', '.'];
-    args.parse(argv);
-    assert.equal(args.logLevel, 'log');
-
-    mockLogger.logLevel = args.logLevel;
-    mockLogger.debug('hello');
-    assert.ok(!mockLogger.stdout.includes('hello'));
-  });
-
-  await test('sample path', () => {
-    const argv = ['.'];
-    args.parse(argv);
-    assert.equal(args.samplePath, '.');
+  it("default sample path is cwd", () => {
+    const argv = ["."];
+    const args = new Args(argv);
+    assertEquals(args.positionals.samplePath.name, ".");
   });
 });

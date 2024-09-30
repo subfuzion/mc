@@ -1,0 +1,3 @@
+name: mc
+version: 1.0.0
+description: "run a suite of one or more programs and report failures"
