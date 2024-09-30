@@ -4,11 +4,13 @@
 primarily intended for automation in a CI environment, but it also provides a
 CLI for interactive test runs.
 
-A run specification includes steps that should be familiar to anyone who has
-written a build config file for Cloud Build or workflows for GitHub Actions.
+A run specification (`mc.spec.yaml`) includes steps that should be familiar to
+anyone who has written a build config file for Cloud Build or workflows for
+GitHub Actions. The spec wil include support for invoking `cloudbuild.yaml`.
 
-The final output is a container image that includes lifecycle steps that support
-setup and teardown steps before launching target containerized programs.
+Cloud Build can be activated by a repo hook to build an image includes lifecycle
+steps which support setup and teardown steps before launching a target
+program(s), and then deployed to Cloud Run.
 
 By default, run specification steps are launched in sequence to ensure
 predictable behavior (for examples, programs that make modifications to storage
