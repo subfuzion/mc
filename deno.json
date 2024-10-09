@@ -1,5 +1,6 @@
 {
   "tasks": {
+    "build": "deno compile --allow-all ./mc.ts",
     "check": "deno fmt --check && deno lint && deno check .",
     "fix": "deno fmt && deno lint --fix && deno check ."
   },
