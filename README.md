@@ -106,3 +106,17 @@ OPTIONS:
    # Additional lint checks
    deno lint --watch
    ```
+
+   ## Use tasks
+
+   Deno tasks are similiar to npm run scripts. Two tasks are defined in
+   `deno.json`:
+
+   - `check` - run checks for format, lint, and types
+   - `fix` - format files and attempt to fix lint issues
+
+   For example, to run `check`, enter:
+
+   ```
+   deno task check
+   ```
