@@ -85,7 +85,8 @@ export class Args {
       loglevel: {
         type: "string",
         default: "info",
-        description: "increase output: silent | error | warn | info * | log | debug",
+        description:
+          "increase output: silent | error | warn | info * | log | debug",
       },
       version: {
         type: "boolean",
