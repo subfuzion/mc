@@ -36,13 +36,13 @@ OPTIONS:
 
 1. Install Deno
 
-   * Linux / macOS
+   - Linux / macOS
 
-      ```text
-      curl -fsSL https://deno.land/install.sh | sh
-      ```
+     ```text
+     curl -fsSL https://deno.land/install.sh | sh
+     ```
 
-   * Others: https://docs.deno.com/runtime/fundamentals/installation/
+   - Others: https://docs.deno.com/runtime/fundamentals/installation/
 
 2. Initialize
 
@@ -53,23 +53,33 @@ OPTIONS:
 3. Try `mc`
 
    ```text
-   ./mc
+   deno -A mc.ts
    ```
-   
-   or
 
-   ```text
-   PATH=".:$PATH"
-   mc
-   ```
-   
 4. Test `mc`
 
    ```text
    deno test
    ```
 
-5. Before pushing changes
+5. Compile `mc`
+
+   ```text
+   deno compile -A mc.ts
+   ```
+
+   Run the executable:
+
+   ```text
+   ./mc
+   ```
+
+   ```text
+   PATH="./:$PATH"
+   mc
+   ```
+
+6. Before pushing changes
 
    Both Visual Studio Code and Webstorm provide Deno support. There is also
    support for other editors. Even with integrated Deno support, you might want
@@ -78,10 +88,10 @@ OPTIONS:
    ```text
    # Ensure code is formatted
    deno fmt
-   
+
    # Ensure types are checked
    deno check
-   
+
    # Additional lint checks
    deno lint
    ```
@@ -92,7 +102,7 @@ OPTIONS:
    ```text
    # Ensure types are checked
    deno check --watch
-   
+
    # Additional lint checks
    deno lint --watch
    ```
